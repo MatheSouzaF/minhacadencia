@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  schedule        DaySchedule[]
+  checks          DayCheck[]
+  pomodoroConfig  PomodoroConfig?
+  refreshTokens   RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model DaySchedule {
+  id       String  @id @default(uuid())
+  userId   String  @map("user_id")
+  day      String  // "segunda" | "terca" | ...
+  label    String
+  tag      String
+  tagType  String  @map("tag_type")
+  order    Int     @default(0)
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slots Slot[]
+
+  @@unique([userId, day])
+  @@map("day_schedules")
+}
+
+model Slot {
+  id            String  @id @default(uuid())
+  dayScheduleId String  @map("day_schedule_id")
+  time          String
+  name          String
+  icon          String?
+  note          String?
+  category      String
+  order         Int     @default(0)
+
+  daySchedule DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
+
+  @@map("slots")
+}
+
+model DayCheck {
+  id     String @id @default(uuid())
+  userId String @map("user_id")
+  date   String // ISO date: "2026-03-09"
+
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checks SlotCheck[]
+
+  @@unique([userId, date])
+  @@map("day_checks")
+}
+
+model SlotCheck {
+  id         String  @id @default(uuid())
+  dayCheckId String  @map("day_check_id")
+  slotId     String  @map("slot_id")
+  checked    Boolean @default(false)
+
+  dayCheck DayCheck @relation(fields: [dayCheckId], references: [id], onDelete: Cascade)
+
+  @@unique([dayCheckId, slotId])
+  @@map("slot_checks")
+}
+
+model PomodoroConfig {
+  id                String  @id @default(uuid())
+  userId            String  @unique @map("user_id")
+  focusMinutes      Int     @default(25) @map("focus_minutes")
+  shortBreak        Int     @default(5) @map("short_break")
+  longBreak         Int     @default(15) @map("long_break")
+  sessionsUntilLong Int     @default(4) @map("sessions_until_long")
+  soundEnabled      Boolean @default(true) @map("sound_enabled")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("pomodoro_configs")
+}

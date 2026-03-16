@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1814;
+    --card: #211f1b;
+    --border: #2e2b25;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --text: #f0ead8;
+    --text-muted: #8a8070;
+    --green: #6abf8a;
+    --blue: #6aaabf;
+    --rose: #bf6a7a;
+    --purple: #9a7abf;
+    --orange: #bf9a6a;
+    --work: #4a7abf;
+
+    /* Shadcn tokens mapeados */
+    --background: 30 5% 6%;
+    --foreground: 40 33% 90%;
+    --card-bg: 30 7% 11%;
+    --card-foreground: 40 33% 90%;
+    --popover: 30 7% 11%;
+    --popover-foreground: 40 33% 90%;
+    --primary: 40 52% 54%;
+    --primary-foreground: 30 5% 6%;
+    --secondary: 32 9% 16%;
+    --secondary-foreground: 40 33% 90%;
+    --muted: 32 9% 16%;
+    --muted-foreground: 35 10% 48%;
+    --accent: 40 52% 54%;
+    --accent-foreground: 30 5% 6%;
+    --destructive: 350 45% 57%;
+    --destructive-foreground: 40 33% 90%;
+    --border-color: 32 9% 16%;
+    --input: 32 9% 16%;
+    --ring: 40 52% 54%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    border-color: var(--border);
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    color-scheme: dark;
+    /* Prevent iOS bounce / overscroll on the root */
+    overflow: hidden;
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  #root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Inputs: minimum 16px to prevent iOS auto-zoom */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+  }
+}
+
+/* Utilitários de categoria */
+.cat-work    { color: var(--work); }
+.cat-jiu     { color: var(--blue); }
+.cat-pray    { color: var(--gold); }
+.cat-read    { color: var(--orange); }
+.cat-study   { color: var(--purple); }
+.cat-video   { color: var(--rose); }
+.cat-free    { color: var(--green); }
+.cat-missa   { color: var(--gold-light); }
+.cat-travel  { color: var(--text-muted); }
+
+.border-cat-work    { border-color: var(--work); }
+.border-cat-jiu     { border-color: var(--blue); }
+.border-cat-pray    { border-color: var(--gold); }
+.border-cat-read    { border-color: var(--orange); }
+.border-cat-study   { border-color: var(--purple); }
+.border-cat-video   { border-color: var(--rose); }
+.border-cat-free    { border-color: var(--green); }
+.border-cat-missa   { border-color: var(--gold-light); }
+.border-cat-travel  { border-color: var(--text-muted); }
+
+.bg-cat-work    { background-color: color-mix(in srgb, var(--work) 15%, transparent); }
+.bg-cat-jiu     { background-color: color-mix(in srgb, var(--blue) 15%, transparent); }
+.bg-cat-pray    { background-color: color-mix(in srgb, var(--gold) 15%, transparent); }
+.bg-cat-read    { background-color: color-mix(in srgb, var(--orange) 15%, transparent); }
+.bg-cat-study   { background-color: color-mix(in srgb, var(--purple) 15%, transparent); }
+.bg-cat-video   { background-color: color-mix(in srgb, var(--rose) 15%, transparent); }
+.bg-cat-free    { background-color: color-mix(in srgb, var(--green) 15%, transparent); }
+.bg-cat-missa   { background-color: color-mix(in srgb, var(--gold-light) 15%, transparent); }
+.bg-cat-travel  { background-color: color-mix(in srgb, var(--text-muted) 15%, transparent); }

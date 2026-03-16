@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma Semanal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1814;
+    --card: #211f1b;
+    --border: #2e2b25;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(201,168,76,0.15);
+    --text: #f0ead8;
+    --text-muted: #8a8070;
+    --green: #6abf8a;
+    --blue: #6aaabf;
+    --rose: #bf6a7a;
+    --purple: #9a7abf;
+    --orange: #bf9a6a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 2px;
+    background: var(--gold);
+    margin: 24px auto 0;
+  }
+
+  .label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  h1 span { color: var(--gold); }
+
+  .subtitle {
+    margin-top: 14px;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* GRID */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .day-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .day-header {
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .day-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .day-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .tag-jiu { background: rgba(106,170,191,0.15); color: var(--blue); }
+  .tag-home { background: rgba(106,191,138,0.15); color: var(--green); }
+  .tag-namorada { background: rgba(191,106,122,0.15); color: var(--rose); }
+  .tag-livre { background: rgba(154,122,191,0.15); color: var(--purple); }
+  .tag-missa { background: rgba(201,168,76,0.15); color: var(--gold); }
+
+  .slots {
+    padding: 14px 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .slot {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--surface);
+    border-left: 3px solid transparent;
+  }
+
+  .slot-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 72px;
+    padding-top: 1px;
+    letter-spacing: 0.3px;
+  }
+
+  .slot-content {}
+
+  .slot-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .slot-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  /* category colors */
+  .cat-work    { border-left-color: #4a7abf; background: rgba(74,122,191,0.07); }
+  .cat-jiu     { border-left-color: var(--blue); background: rgba(106,170,191,0.07); }
+  .cat-pray    { border-left-color: var(--gold); background: rgba(201,168,76,0.07); }
+  .cat-read    { border-left-color: var(--orange); background: rgba(191,154,106,0.07); }
+  .cat-study   { border-left-color: var(--purple); background: rgba(154,122,191,0.07); }
+  .cat-video   { border-left-color: var(--rose); background: rgba(191,106,122,0.07); }
+  .cat-free    { border-left-color: var(--green); background: rgba(106,191,138,0.07); }
+  .cat-missa   { border-left-color: var(--gold-light); background: rgba(232,201,122,0.07); }
+  .cat-travel  { border-left-color: #888; background: rgba(136,136,136,0.06); }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+  }
+
+  /* NOTES */
+  .notes-section {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .note-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .note-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .note-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .note-card li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .note-card li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .week-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="label">Planejamento Pessoal</div>
+    <h1>Cronograma <span>Semanal</span></h1>
+    <p class="subtitle">Trabalho · Jiu-Jítsu · Fé · Crescimento · Vídeos</p>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:#4a7abf"></div>Trabalho</div>
+    <div class="legend-item"><div class="dot" style="background:var(--blue)"></div>Jiu-Jítsu</div>
+    <div class="legend-item"><div class="dot" style="background:var(--gold)"></div>Oração</div>
+    <div class="legend-item"><div class="dot" style="background:var(--orange)"></div>Leitura</div>
+    <div class="legend-item"><div class="dot" style="background:var(--purple)"></div>Estudos Igreja</div>
+    <div class="legend-item"><div class="dot" style="background:var(--rose)"></div>Vídeo</div>
+    <div class="legend-item"><div class="dot" style="background:var(--green)"></div>Livre</div>
+  </div>
+
+  <div class="week-grid">
+
+    <!-- SEGUNDA -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Segunda</div>
+        <div class="day-tag tag-jiu">Jiu + Empresa</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">05h45</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min · antes de sair para o treino</div>
+          </div>
+        </div>
+        <div class="slot cat-jiu">
+          <div class="slot-time">06h00–08h10</div>
+          <div class="slot-content">
+            <div class="slot-name">🥋 Jiu-Jítsu</div>
+            <div class="slot-note">Acorda · desloca · treina</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">08h35–12h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+            <div class="slot-note">Após banho na empresa</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">12h00–12h30</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+            <div class="slot-note">20–25 min na pausa do almoço</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">13h00–18h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-video">
+          <div class="slot-time">19h30–21h00</div>
+          <div class="slot-content">
+            <div class="slot-name">🎬 Gravação de vídeo</div>
+            <div class="slot-note">Vídeo 1 da semana</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">21h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min · gratidão pelo dia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERÇA -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Terça</div>
+        <div class="day-tag tag-home">Home Office</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">08h30</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min · antes de iniciar o trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">09h00–12h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">12h00–12h30</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+            <div class="slot-note">25 min · pausa do almoço</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">13h00–18h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-study">
+          <div class="slot-time">18h30–19h30</div>
+          <div class="slot-content">
+            <div class="slot-name">✝️ Estudos · Igreja Católica</div>
+            <div class="slot-note">Estudo 1 da semana · 60 min</div>
+          </div>
+        </div>
+        <div class="slot cat-video">
+          <div class="slot-time">20h00–21h00</div>
+          <div class="slot-content">
+            <div class="slot-name">✂️ Edição de vídeo</div>
+            <div class="slot-note">Editar o vídeo gravado na segunda</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">21h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUARTA -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Quarta</div>
+        <div class="day-tag tag-namorada">Jiu + Namorada</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">05h45</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min · rápida antes do treino</div>
+          </div>
+        </div>
+        <div class="slot cat-jiu">
+          <div class="slot-time">06h00–08h10</div>
+          <div class="slot-content">
+            <div class="slot-name">🥋 Jiu-Jítsu</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">08h35–12h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">12h00–12h25</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+            <div class="slot-note">Pausa do almoço</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">13h00–18h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-travel">
+          <div class="slot-time">18h00–19h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🚗 Deslocamento</div>
+            <div class="slot-note">Empresa → Casa da namorada</div>
+          </div>
+        </div>
+        <div class="slot cat-free">
+          <div class="slot-time">19h30–21h30</div>
+          <div class="slot-content">
+            <div class="slot-name">❤️ Tempo com a namorada</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">22h00</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min · podem rezar juntos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUINTA -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Quinta</div>
+        <div class="day-tag tag-home">Home Office</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">08h30</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">09h00–12h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">12h00–12h30</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">13h00–18h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-video">
+          <div class="slot-time">18h30–20h00</div>
+          <div class="slot-content">
+            <div class="slot-name">🎬 Gravação de vídeo</div>
+            <div class="slot-note">Vídeo 2 da semana</div>
+          </div>
+        </div>
+        <div class="slot cat-study">
+          <div class="slot-time">20h30–21h30</div>
+          <div class="slot-content">
+            <div class="slot-name">✝️ Estudos · Igreja Católica</div>
+            <div class="slot-note">Estudo 2 da semana · 60 min</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">22h00</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEXTA -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Sexta</div>
+        <div class="day-tag tag-namorada">Jiu + Namorada</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">05h45</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min</div>
+          </div>
+        </div>
+        <div class="slot cat-jiu">
+          <div class="slot-time">06h00–08h10</div>
+          <div class="slot-content">
+            <div class="slot-name">🥋 Jiu-Jítsu</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">08h35–12h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">12h00–12h25</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+          </div>
+        </div>
+        <div class="slot cat-work">
+          <div class="slot-time">13h00–18h00</div>
+          <div class="slot-content">
+            <div class="slot-name">💼 Trabalho</div>
+          </div>
+        </div>
+        <div class="slot cat-travel">
+          <div class="slot-time">18h00–19h20</div>
+          <div class="slot-content">
+            <div class="slot-name">🚗 Deslocamento</div>
+            <div class="slot-note">Empresa → Casa da namorada</div>
+          </div>
+        </div>
+        <div class="slot cat-free">
+          <div class="slot-time">19h20–22h00</div>
+          <div class="slot-content">
+            <div class="slot-name">❤️ Tempo com a namorada</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">22h00</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SÁBADO -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Sábado</div>
+        <div class="day-tag tag-livre">Na namorada</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">08h30</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min · com calma, sem pressa</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">09h00–10h00</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+            <div class="slot-note">Dia livre → leitura mais longa</div>
+          </div>
+        </div>
+        <div class="slot cat-video">
+          <div class="slot-time">10h30–12h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🎬 Gravação + Edição</div>
+            <div class="slot-note">Vídeo 3 da semana · bloco concentrado</div>
+          </div>
+        </div>
+        <div class="slot cat-free">
+          <div class="slot-time">13h00–22h00</div>
+          <div class="slot-content">
+            <div class="slot-name">❤️ Tempo com a namorada</div>
+            <div class="slot-note">Tarde e noite livres</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">22h00</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min · gratidão pelo fim de semana</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOMINGO -->
+    <div class="day-card">
+      <div class="day-header">
+        <div class="day-name">Domingo</div>
+        <div class="day-tag tag-missa">Missa + Descanso</div>
+      </div>
+      <div class="slots">
+        <div class="slot cat-pray">
+          <div class="slot-time">08h30</div>
+          <div class="slot-content">
+            <div class="slot-name">☀️ Oração matinal</div>
+            <div class="slot-note">10 min · antes de sair</div>
+          </div>
+        </div>
+        <div class="slot cat-travel">
+          <div class="slot-time">09h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🚗 Saída para a Missa</div>
+          </div>
+        </div>
+        <div class="slot cat-missa">
+          <div class="slot-time">10h00–11h00</div>
+          <div class="slot-content">
+            <div class="slot-name">⛪ Missa</div>
+          </div>
+        </div>
+        <div class="slot cat-travel">
+          <div class="slot-time">11h00–11h20</div>
+          <div class="slot-content">
+            <div class="slot-name">🚗 Retorno</div>
+          </div>
+        </div>
+        <div class="slot cat-free">
+          <div class="slot-time">11h30–13h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🍽️ Almoço em família / descanso</div>
+          </div>
+        </div>
+        <div class="slot cat-read">
+          <div class="slot-time">14h00–15h00</div>
+          <div class="slot-content">
+            <div class="slot-name">📖 Leitura</div>
+            <div class="slot-note">Momento tranquilo de domingo</div>
+          </div>
+        </div>
+        <div class="slot cat-video">
+          <div class="slot-time">15h30–17h00</div>
+          <div class="slot-content">
+            <div class="slot-name">✂️ Edição de vídeos</div>
+            <div class="slot-note">Fechar edições da semana</div>
+          </div>
+        </div>
+        <div class="slot cat-free">
+          <div class="slot-time">17h00–21h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🌿 Descanso total</div>
+            <div class="slot-note">Preparar para a semana</div>
+          </div>
+        </div>
+        <div class="slot cat-pray">
+          <div class="slot-time">21h30</div>
+          <div class="slot-content">
+            <div class="slot-name">🙏 Oração noturna</div>
+            <div class="slot-note">10 min · encerrar a semana com gratidão</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes-section">
+    <div class="note-card">
+      <h3>📖 Estratégia de Leitura</h3>
+      <ul>
+        <li>Hábito ancorado no almoço (todo dia)</li>
+        <li>Comece com 15 min e vá aumentando</li>
+        <li>Sáb e Dom têm blocos mais longos</li>
+        <li>Tenha o livro sempre à mão</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h3>🙏 Estratégia de Oração</h3>
+      <ul>
+        <li>Manhã: 10 min · oferecer o dia a Deus</li>
+        <li>Noite: 10 min · gratidão e exame de consciência</li>
+        <li>Na quarta e sexta podem rezar em casal</li>
+        <li>A Missa do domingo é o ápice semanal</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h3>🎬 Estratégia de Vídeos</h3>
+      <ul>
+        <li>Vídeo 1: grava seg, edita ter</li>
+        <li>Vídeo 2: grava qui, edita dom</li>
+        <li>Vídeo 3: grava + edita sábado</li>
+        <li>3 vídeos por semana atingidos!</li>
+      </ul>
+    </div>
+    <div class="note-card">
+      <h3>✝️ Estratégia de Estudos</h3>
+      <ul>
+        <li>Estudo 1: terça à noite (18h30)</li>
+        <li>Estudo 2: quinta à noite (20h30)</li>
+        <li>60 min cada sessão</li>
+        <li>Pode integrar com os vídeos!</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
