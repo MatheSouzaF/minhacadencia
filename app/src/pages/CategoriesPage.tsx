@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
-import { v4 as uuidv4 } from 'uuid'
 import { type UserCategory, PALETTE_COLORS } from '@/types'
 import { useCategories } from '@/contexts/CategoryContext'
 
