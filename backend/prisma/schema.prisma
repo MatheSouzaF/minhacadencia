@@ -19,6 +19,8 @@ model User {
   checks          DayCheck[]
   pomodoroConfig  PomodoroConfig?
   refreshTokens   RefreshToken[]
+  monthlyGoals    MonthlyGoal[]
+  dateSlots       DateSlot[]
 
   @@map("users")
 }
@@ -88,6 +90,49 @@ model SlotCheck {
 
   @@unique([dayCheckId, slotId])
   @@map("slot_checks")
+}
+
+model MonthlyGoal {
+  id      String  @id @default(uuid())
+  userId  String  @map("user_id")
+  month   String  // "2026-03"
+  title   String
+  emoji   String  @default("⭐")
+  unit    String  @default("dias")
+  target  Int
+  color   String  @default("var(--gold)")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries MonthlyGoalEntry[]
+
+  @@map("monthly_goals")
+}
+
+model MonthlyGoalEntry {
+  id     String @id @default(uuid())
+  goalId String @map("goal_id")
+  date   String // "2026-03-16"
+
+  goal MonthlyGoal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@unique([goalId, date])
+  @@map("monthly_goal_entries")
+}
+
+model DateSlot {
+  id       String  @id @default(uuid())
+  userId   String  @map("user_id")
+  date     String  // "2026-03-22"
+  time     String
+  name     String
+  icon     String?
+  note     String?
+  category String
+  order    Int     @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("date_slots")
 }
 
 model PomodoroConfig {

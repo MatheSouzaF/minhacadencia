@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, CalendarX } from 'lucide-react'
+import { Plus, CalendarX, CheckCircle2, Circle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import {
@@ -25,8 +25,85 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { SlotItem } from './SlotItem'
 import { SlotEditor } from './SlotEditor'
 import { useSchedule } from '@/contexts/ScheduleContext'
-import type { DaySchedule, Slot, DayOfWeek, TagType } from '@/types'
+import { useMonthly } from '@/contexts/MonthlyContext'
+import type { DaySchedule, Slot, DayOfWeek, TagType, MonthlyGoal } from '@/types'
 import { DAY_ORDER } from '@/types'
+
+// ─── Lógica de filtro de metas ────────────────────────────────────────────────
+
+const PROGRESS_UNITS = new Set(['r$', 'km', 'páginas', 'horas', 'kg'])
+
+function isHabitGoal(g: MonthlyGoal) {
+  if (g.unit === '') return false // milestone — check manual
+  if (PROGRESS_UNITS.has(g.unit.toLowerCase())) return false // progresso numérico
+  return true
+}
+
+// ─── Item de meta diária ──────────────────────────────────────────────────────
+
+function DailyGoalItem({
+  goal,
+  date,
+  onToggle,
+}: {
+  goal: MonthlyGoal
+  date: string
+  onToggle: () => void
+}) {
+  // Estado local para resposta visual imediata, independente da API
+  const [localChecked, setLocalChecked] = useState<boolean | null>(null)
+  const checked = localChecked !== null ? localChecked : goal.entries.includes(date)
+  const done    = goal.entries.length + (localChecked === true && !goal.entries.includes(date) ? 1 : localChecked === false && goal.entries.includes(date) ? -1 : 0)
+  const pct     = Math.min(100, Math.round((Math.max(0, done) / goal.target) * 100))
+
+  function handleClick(e: React.MouseEvent) {
+    e.stopPropagation()
+    setLocalChecked(!checked)
+    onToggle()
+  }
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={(e) => e.key === 'Enter' && handleClick(e as unknown as React.MouseEvent)}
+      className={cn(
+        'group flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all duration-150 select-none',
+        checked ? 'bg-[color-mix(in_srgb,var(--gold)_8%,transparent)]' : 'hover:bg-[var(--surface)]'
+      )}
+    >
+      {/* Check de hoje */}
+      {checked
+        ? <CheckCircle2 className="w-4 h-4 shrink-0 transition-colors" style={{ color: goal.color }} />
+        : <Circle       className="w-4 h-4 shrink-0 text-[var(--text-muted)] group-hover:text-[var(--text)] transition-colors" />
+      }
+
+      <span className="text-sm leading-none">{goal.emoji}</span>
+
+      {/* Título */}
+      <span className={cn(
+        'flex-1 text-xs truncate transition-colors',
+        checked ? 'text-[var(--text-muted)] line-through' : 'text-[var(--text)]'
+      )}>
+        {goal.title}
+      </span>
+
+      {/* Progresso MENSAL — claramente separado */}
+      <div className="flex items-center gap-1 shrink-0 opacity-50 group-hover:opacity-80 transition-opacity">
+        <div className="w-10 h-1 bg-zinc-800 rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{ width: `${pct}%`, backgroundColor: goal.color }}
+          />
+        </div>
+        <span className="text-[9px] text-[var(--text-muted)] tabular-nums">
+          {Math.max(0, done)}/{goal.target}
+        </span>
+      </div>
+    </div>
+  )
+}
 
 // ─── Badge variant por tagType ────────────────────────────────────────────────
 
@@ -66,10 +143,15 @@ interface DayCardProps {
 
 export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps) {
   const { toggleCheck, addSlot, updateSlot, deleteSlot, reorderSlots, isChecked } = useSchedule()
+  const { goals, toggleEntry } = useMonthly()
   const [editorOpen, setEditorOpen] = useState(false)
   const [editingSlot, setEditingSlot] = useState<Slot | null>(null)
 
   const date = getDateForDayOfWeek(daySchedule.day)
+
+  // Metas de hábito do mês atual
+  const currentMonth  = date.slice(0, 7)
+  const dailyGoals    = goals.filter((g) => g.month === currentMonth && isHabitGoal(g))
   const checkedCount = daySchedule.slots.filter((s) => isChecked(date, s.id)).length
   const progress = daySchedule.slots.length > 0
     ? Math.round((checkedCount / daySchedule.slots.length) * 100)
@@ -203,7 +285,7 @@ export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps
         </DndContext>
 
         <AnimatePresence>
-          {daySchedule.slots.length === 0 && (
+          {daySchedule.slots.length === 0 && dailyGoals.length === 0 && (
             <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -213,6 +295,38 @@ export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps
             >
               <CalendarX className="w-6 h-6 opacity-40" />
               <p className="text-xs">Nenhum slot ainda.</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Metas mensais diárias */}
+        <AnimatePresence>
+          {dailyGoals.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="mt-1"
+            >
+              {daySchedule.slots.length > 0 && (
+                <div className="flex items-center gap-2 px-2 py-1">
+                  <div className="flex-1 h-px bg-[var(--border)]" />
+                  <span className="text-[9px] font-medium text-[var(--text-muted)] uppercase tracking-wider">
+                    Metas
+                  </span>
+                  <div className="flex-1 h-px bg-[var(--border)]" />
+                </div>
+              )}
+              <div className="space-y-0.5">
+                {dailyGoals.map((goal) => (
+                  <DailyGoalItem
+                    key={goal.id}
+                    goal={goal}
+                    date={date}
+                    onToggle={() => toggleEntry(goal.id, date)}
+                  />
+                ))}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 import { type UserCategory, PALETTE_COLORS } from '@/types'
 import { useCategories } from '@/contexts/CategoryContext'
+import { EmojiPicker } from '@/components/EmojiPicker'
 
 function ColorPicker({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
@@ -53,12 +54,7 @@ function CategoryRow({ cat }: { cat: UserCategory }) {
       {editing ? (
         <div className="p-4 space-y-3">
           <div className="flex gap-2">
-            <input
-              type="text"
-              value={emoji}
-              onChange={(e) => setEmoji(e.target.value)}
-              className="w-14 bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-center text-sm text-white focus:outline-none focus:border-zinc-500"
-            />
+            <EmojiPicker value={emoji} onChange={setEmoji} />
             <input
               type="text"
               value={name}
@@ -125,13 +121,7 @@ function AddCategoryForm({ onClose }: { onClose: () => void }) {
       <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-4 space-y-3">
         <p className="text-xs font-medium text-zinc-400">Nova categoria</p>
         <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Emoji"
-            value={emoji}
-            onChange={(e) => setEmoji(e.target.value)}
-            className="w-14 bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1.5 text-center text-sm text-white focus:outline-none focus:border-zinc-500"
-          />
+          <EmojiPicker value={emoji} onChange={setEmoji} />
           <input
             type="text"
             placeholder="Nome da categoria"

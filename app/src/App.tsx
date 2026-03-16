@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from '@/contexts/AuthContext'
 import { CategoryProvider } from '@/contexts/CategoryContext'
 import { ScheduleProvider } from '@/contexts/ScheduleContext'
 import { PomodoroProvider } from '@/contexts/PomodoroContext'
+import { MonthlyProvider } from '@/contexts/MonthlyContext'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { TopBar } from '@/components/layout/TopBar'
 import { PomodoroWidget } from '@/components/pomodoro/PomodoroWidget'
@@ -13,6 +14,8 @@ import { SchedulePage } from '@/pages/SchedulePage'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { PomodoroPage } from '@/pages/PomodoroPage'
 import { CategoriesPage } from '@/pages/CategoriesPage'
+import { MonthlyPage } from '@/pages/MonthlyPage'
+import { GoalAutoSync } from '@/components/GoalAutoSync'
 import LoginPage from '@/pages/LoginPage'
 
 const pageVariants = {
@@ -38,6 +41,7 @@ function AnimatedRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/pomodoro" element={<PomodoroPage />} />
           <Route path="/categorias" element={<CategoriesPage />} />
+          <Route path="/mensal" element={<MonthlyPage />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -92,12 +96,15 @@ function ProtectedApp() {
   return (
     <CategoryProvider>
       <ScheduleProvider>
-        <PomodoroProvider>
-          <Layout>
-            <AnimatedRoutes />
-          </Layout>
-          <OnboardingModal />
-        </PomodoroProvider>
+        <MonthlyProvider>
+          <PomodoroProvider>
+            <GoalAutoSync />
+            <Layout>
+              <AnimatedRoutes />
+            </Layout>
+            <OnboardingModal />
+          </PomodoroProvider>
+        </MonthlyProvider>
       </ScheduleProvider>
     </CategoryProvider>
   )

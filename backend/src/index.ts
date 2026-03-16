@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import authRoutes from './routes/auth.routes'
 import scheduleRoutes from './routes/schedule.routes'
+import monthlyRoutes from './routes/monthly.routes'
 
 const app = express()
 const PORT = process.env.PORT ?? 3001
@@ -21,6 +22,7 @@ app.get('/health', (_req, res) => res.json({ ok: true }))
 
 app.use('/auth', authRoutes)
 app.use('/', scheduleRoutes)
+app.use('/', monthlyRoutes)
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend rodando em http://localhost:${PORT}`)

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { CalendarDays, LayoutDashboard, Timer, LogOut, Tag, Waves } from 'lucide-react'
+import { CalendarDays, LayoutDashboard, Timer, LogOut, Tag, Waves, CalendarRange } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -8,6 +8,7 @@ const navItems = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/pomodoro', icon: Timer, label: 'Pomodoro' },
   { to: '/categorias', icon: Tag, label: 'Categorias' },
+  { to: '/mensal', icon: CalendarRange, label: 'Mensal' },
 ]
 
 export function Sidebar() {

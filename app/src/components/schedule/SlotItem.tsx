@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import { Trash2, GripVertical } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { cn } from '@/utils/cn'
@@ -22,7 +21,6 @@ interface SlotItemProps {
 // ─── Componente ───────────────────────────────────────────────────────────────
 
 export function SlotItem({ slot, checked, onToggle, onEdit, onDelete }: SlotItemProps) {
-  const [isHovered, setIsHovered] = useState(false)
   const { getCategoryById } = useCategories()
   const color = getCategoryById(slot.category)?.color ?? 'var(--text-muted)'
 
@@ -57,8 +55,6 @@ export function SlotItem({ slot, checked, onToggle, onEdit, onDelete }: SlotItem
         checked && 'opacity-55',
         isDragging && 'shadow-2xl bg-[var(--card)]'
       )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Drag handle */}
       <button
@@ -104,29 +100,18 @@ export function SlotItem({ slot, checked, onToggle, onEdit, onDelete }: SlotItem
         )}
       </button>
 
-      {/* Botão deletar (aparece no hover) */}
-      <AnimatePresence>
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.12 }}
+      {/* Botão deletar */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            onClick={(e) => { e.stopPropagation(); onDelete() }}
+            className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 text-[var(--text-muted)] hover:text-[var(--rose)] cursor-pointer"
           >
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={(e) => { e.stopPropagation(); onDelete() }}
-                  className="shrink-0 text-[var(--text-muted)] hover:text-[var(--rose)] transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>Remover slot</TooltipContent>
-            </Tooltip>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>Remover slot</TooltipContent>
+      </Tooltip>
     </motion.div>
   )
 }

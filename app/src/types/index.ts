@@ -63,6 +63,11 @@ export interface DaySchedule {
   slots: Slot[]
 }
 
+// ─── Slot específico de data (não recorrente, só naquele dia) ───────────────
+export interface SpecificDateSlot extends Slot {
+  date: string  // "2026-03-22"
+}
+
 // ─── Checks de um dia (por data real, não por dia-da-semana) ────────────────
 export interface DayCheck {
   date: string
@@ -101,6 +106,18 @@ export interface AppState {
 export const DAY_ORDER: DayOfWeek[] = [
   'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo'
 ]
+
+// ─── Meta mensal ────────────────────────────────────────────────────────────
+export interface MonthlyGoal {
+  id: string
+  month: string        // "2026-03"
+  title: string
+  emoji: string
+  unit: string         // "dias", "km", "livros"
+  target: number
+  color: string
+  entries: string[]    // array of ISO dates where entry exists
+}
 
 export function getTodayDayOfWeek(): DayOfWeek {
   const jsDay = new Date().getDay()

@@ -4,6 +4,7 @@ import { DayProgress } from '@/components/dashboard/DayProgress'
 import { WeekProgress } from '@/components/dashboard/WeekProgress'
 import { MonthProgress } from '@/components/dashboard/MonthProgress'
 import { CategoryBreakdown } from '@/components/dashboard/CategoryBreakdown'
+import { MonthlyGoalsWidget } from '@/components/dashboard/MonthlyGoalsWidget'
 
 export function DashboardPage() {
   const { dayProgress, weekProgress, monthProgress } = useProgress()
@@ -25,6 +26,9 @@ export function DashboardPage() {
             title="Categorias — hoje"
           />
         </div>
+
+        {/* Linha 3 — Metas mensais */}
+        <MonthlyGoalsWidget />
       </div>
     </TooltipProvider>
   )

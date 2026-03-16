@@ -50,11 +50,12 @@ export async function toggleCheck(req: AuthRequest, res: Response): Promise<void
 
   const { date, slotId } = parsed.data
 
-  // Garante que o slot pertence ao usuário
-  const slot = await prisma.slot.findFirst({
-    where: { id: slotId, daySchedule: { userId: req.userId } },
-  })
-  if (!slot) {
+  // Garante que o slot pertence ao usuário (slot recorrente ou slot de data específica)
+  const [slot, dateSlot] = await Promise.all([
+    prisma.slot.findFirst({ where: { id: slotId, daySchedule: { userId: req.userId } } }),
+    prisma.dateSlot.findFirst({ where: { id: slotId, userId: req.userId } }),
+  ])
+  if (!slot && !dateSlot) {
     res.status(404).json({ error: 'Slot não encontrado' })
     return
   }

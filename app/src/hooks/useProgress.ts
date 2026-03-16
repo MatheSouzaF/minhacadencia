@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, getDaysInMonth, startOfMonth } from 'date-fns'
+import { format, startOfWeek, endOfWeek, eachDayOfInterval, getDaysInMonth, startOfMonth, parse } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { useSchedule } from '@/contexts/ScheduleContext'
 import { useCategories } from '@/contexts/CategoryContext'
@@ -222,4 +222,59 @@ export function useProgress() {
   }, [state, todayISO])
 
   return { dayProgress, weekProgress, monthProgress, todayISO }
+}
+
+// ─── Hook para mês arbitrário ─────────────────────────────────────────────────
+
+export function useMonthProgress(month: string): MonthProgressData {
+  const { state } = useSchedule()
+  const now = new Date()
+  const todayISO = format(now, 'yyyy-MM-dd')
+
+  return useMemo((): MonthProgressData => {
+    const monthDate = parse(month, 'yyyy-MM', new Date())
+    const monthStart = startOfMonth(monthDate)
+    const daysInMonth = getDaysInMonth(monthDate)
+
+    const startDow = (monthStart.getDay() + 6) % 7 // 0=seg ... 6=dom
+
+    const heatmap: MonthHeatmapDay[] = []
+
+    for (let i = 0; i < startDow; i++) {
+      heatmap.push({ date: '', percent: 0, total: 0, checked: 0, isCurrentMonth: false })
+    }
+
+    let monthTotal = 0
+    let monthChecked = 0
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(monthDate.getFullYear(), monthDate.getMonth(), d)
+      const dateISO = format(date, 'yyyy-MM-dd')
+      const dow = dateToDayOfWeek(date)
+      const daySchedule = state.schedule.find((s) => s.day === dow)
+      const dayCheck = state.checks[dateISO] ?? { date: dateISO, checks: {} }
+
+      const dayTotal = daySchedule?.slots.length ?? 0
+      const dayChecked = daySchedule
+        ? daySchedule.slots.filter((s) => dayCheck.checks[s.id]).length
+        : 0
+      const dayPercent = dayTotal > 0 ? Math.round((dayChecked / dayTotal) * 100) : 0
+
+      if (dateISO <= todayISO) {
+        monthTotal += dayTotal
+        monthChecked += dayChecked
+      }
+
+      heatmap.push({
+        date: dateISO,
+        percent: dayPercent,
+        total: dayTotal,
+        checked: dayChecked,
+        isCurrentMonth: true,
+      })
+    }
+
+    const percent = monthTotal > 0 ? Math.round((monthChecked / monthTotal) * 100) : 0
+    return { total: monthTotal, checked: monthChecked, percent, heatmap }
+  }, [state, month, todayISO])
 }
