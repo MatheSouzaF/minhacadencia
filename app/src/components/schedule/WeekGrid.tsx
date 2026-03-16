@@ -59,6 +59,8 @@ export function WeekGrid() {
 
   // Desktop swipe
   function onPointerDown(e: React.PointerEvent) {
+    const target = e.target as HTMLElement
+    if (target.closest('button, input, select, textarea, a, [role="button"], [role="combobox"], [role="listbox"]')) return
     e.currentTarget.setPointerCapture(e.pointerId)
     dragRef.current = { startX: e.clientX }
   }
