@@ -23,11 +23,11 @@ export function PomodoroWidget() {
 
   return (
     <>
-      {/* Botão flutuante */}
+      {/* Botão flutuante — apenas desktop */}
       <button
         onClick={() => setOpen(!open)}
         className={cn(
-          'fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer',
+          'hidden md:flex fixed bottom-6 right-6 z-50 items-center gap-2 px-4 py-2.5 rounded-full cursor-pointer',
           'border shadow-lg transition-all duration-300',
           isActive
             ? 'bg-[var(--gold)] text-[var(--bg)] border-[var(--gold-light)] shadow-[0_0_20px_color-mix(in_srgb,var(--gold)_40%,transparent)]'
@@ -43,17 +43,15 @@ export function PomodoroWidget() {
         {!isActive && <span className="text-sm font-medium">Pomodoro</span>}
       </button>
 
-      {/* Popover compacto */}
+      {/* Popover compacto — apenas desktop */}
       {open && (
         <>
-          {/* Backdrop */}
           <div
             className="fixed inset-0 z-40"
             onClick={() => setOpen(false)}
           />
-          {/* Card */}
           <div className={cn(
-            'fixed bottom-20 right-6 z-50',
+            'hidden md:block fixed bottom-20 right-6 z-50',
             'bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-2xl',
             'w-64'
           )}>

@@ -177,7 +177,7 @@ export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps
       </div>
 
       {/* Lista de slots */}
-      <div className="flex-1 px-2 py-2 space-y-0.5 overflow-hidden">
+      <div className="flex-1 px-2 py-2 space-y-0.5 overflow-y-auto min-h-0">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
