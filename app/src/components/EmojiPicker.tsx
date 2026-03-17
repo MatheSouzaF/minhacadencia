@@ -65,8 +65,8 @@ export function EmojiPicker({ value, onChange }: Props) {
         type="button"
         onClick={openPicker}
         title="Escolher emoji"
-        className={`w-12 h-9 flex items-center justify-center text-xl bg-zinc-800 border rounded-lg transition-colors ${
-          open ? 'border-zinc-500' : 'border-zinc-700 hover:border-zinc-500'
+        className={`w-12 h-9 flex items-center justify-center text-xl bg-[var(--surface)] border rounded-lg transition-colors ${
+          open ? 'border-[var(--text-muted)]' : 'border-[var(--border)] hover:border-[var(--text-muted)]'
         }`}
       >
         {value || '⭐'}
@@ -76,12 +76,12 @@ export function EmojiPicker({ value, onChange }: Props) {
         <div
           ref={popoverRef}
           style={{ top: pos.top, left: pos.left }}
-          className="fixed z-[9999] w-72 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden"
+          className="fixed z-[9999] w-72 bg-[var(--surface)] border border-[var(--border)] rounded-xl shadow-2xl overflow-hidden"
         >
           <div className="max-h-64 overflow-y-auto p-2 pb-4 space-y-3">
             {EMOJI_GROUPS.map((group) => (
               <div key={group.label}>
-                <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-1 mb-1.5">
+                <p className="text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider px-1 mb-1.5">
                   {group.label}
                 </p>
                 <div className="grid grid-cols-10 gap-0.5">
@@ -90,8 +90,8 @@ export function EmojiPicker({ value, onChange }: Props) {
                       key={emoji}
                       type="button"
                       onClick={() => { onChange(emoji); setOpen(false) }}
-                      className={`w-7 h-7 flex items-center justify-center text-lg rounded-md transition-colors hover:bg-zinc-700 ${
-                        value === emoji ? 'bg-zinc-700' : ''
+                      className={`w-7 h-7 flex items-center justify-center text-lg rounded-md transition-colors hover:bg-gray-200 ${
+                        value === emoji ? 'bg-gray-300' : ''
                       }`}
                     >
                       {emoji}

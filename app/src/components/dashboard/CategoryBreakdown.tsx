@@ -13,7 +13,7 @@ export function CategoryBreakdown({ categories, title = 'Por categoria' }: Categ
   if (categories.length === 0) {
     return (
       <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5">
-        <h3 className="font-serif text-lg font-semibold text-[var(--text)] mb-2">{title}</h3>
+        <h3 className="text-lg font-semibold text-[var(--text)] mb-2">{title}</h3>
         <p className="text-sm text-[var(--text-muted)]">Nenhum dado disponível ainda.</p>
       </div>
     )
@@ -23,7 +23,7 @@ export function CategoryBreakdown({ categories, title = 'Por categoria' }: Categ
 
   return (
     <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 space-y-4">
-      <h3 className="font-serif text-lg font-semibold text-[var(--text)]">{title}</h3>
+      <h3 className="text-lg font-semibold text-[var(--text)]">{title}</h3>
 
       <div className="space-y-3">
         {sorted.map(({ category, label, total, checked, percent }) => {

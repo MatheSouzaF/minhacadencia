@@ -38,16 +38,16 @@ export function MonthCalendar({ month, selectedDay, onSelectDay, onChangeMonth }
   }
 
   return (
-    <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-4">
+    <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 flex flex-col h-full">
       {/* Navigation header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-3">
         <button
           onClick={handlePrev}
           className="flex items-center justify-center w-8 h-8 rounded-lg text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
-        <h3 className="font-serif font-semibold text-[var(--text)] capitalize text-base">
+        <h3 className="font-semibold text-[var(--text)] capitalize text-base">
           {monthLabel}
         </h3>
         <button
@@ -59,17 +59,17 @@ export function MonthCalendar({ month, selectedDay, onSelectDay, onChangeMonth }
       </div>
 
       {/* Week day headers */}
-      <div className="grid grid-cols-7 gap-1 text-center">
+      <div className="grid grid-cols-7 gap-1 text-center mb-1">
         {WEEK_DAYS.map((d) => (
-          <div key={d} className="text-[10px] font-medium text-[var(--text-muted)] uppercase">{d}</div>
+          <div key={d} className="text-[11px] font-medium text-[var(--text-muted)] uppercase">{d}</div>
         ))}
       </div>
 
-      {/* Calendar cells */}
-      <div className="grid grid-cols-7 gap-1">
+      {/* Calendar cells — preenche toda a altura restante */}
+      <div className="grid grid-cols-7 auto-rows-fr gap-1 flex-1 min-h-0">
         {monthData.heatmap.map((cell, i) => {
           if (!cell.isCurrentMonth) {
-            return <div key={`empty-${i}`} className="aspect-square rounded-md" />
+            return <div key={`empty-${i}`} className="rounded-lg" />
           }
 
           const dayNum = cell.date ? parseInt(cell.date.split('-')[2]) : 0
@@ -83,15 +83,15 @@ export function MonthCalendar({ month, selectedDay, onSelectDay, onChangeMonth }
               key={cell.date}
               onClick={() => onSelectDay(cell.date)}
               className={cn(
-                'aspect-square rounded-md flex items-center justify-center transition-all duration-150',
-                'text-xs font-medium cursor-pointer hover:scale-105 hover:z-10',
-                isFuture && 'opacity-50',
+                'rounded-lg flex items-center justify-center transition-all duration-150',
+                'text-sm font-medium cursor-pointer hover:scale-[1.03] hover:z-10',
+                isFuture && 'opacity-40',
                 isToday && 'ring-2 ring-[var(--gold)] ring-offset-1 ring-offset-[var(--card)]',
-                isSelected && 'ring-2 ring-white/70 ring-offset-1 ring-offset-[var(--card)]',
+                isSelected && !isToday && 'ring-2 ring-white/60 ring-offset-1 ring-offset-[var(--card)]',
               )}
               style={{
                 backgroundColor: bg,
-                color: cell.percent > 50 && !isFuture ? 'rgba(0,0,0,0.6)' : 'var(--text-muted)',
+                color: cell.percent > 50 && !isFuture ? 'rgba(0,0,0,0.7)' : 'var(--text-muted)',
               }}
             >
               {dayNum}
@@ -101,7 +101,7 @@ export function MonthCalendar({ month, selectedDay, onSelectDay, onChangeMonth }
       </div>
 
       {/* Summary */}
-      <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pt-1 border-t border-[var(--border)]">
+      <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pt-3 mt-3 border-t border-[var(--border)]">
         <span>{monthData.checked}/{monthData.total} slots</span>
         <span className="font-semibold text-[var(--gold)]">{monthData.percent}%</span>
       </div>

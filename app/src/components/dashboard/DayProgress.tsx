@@ -21,7 +21,7 @@ export function DayProgress({ data }: DayProgressProps) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-serif text-lg font-semibold text-[var(--text)] capitalize">{today}</h3>
+          <h3 className="text-lg font-semibold text-[var(--text)] capitalize">{today}</h3>
           <p className="text-sm text-[var(--text-muted)] mt-0.5">Progresso de hoje</p>
         </div>
         <div className="text-right">

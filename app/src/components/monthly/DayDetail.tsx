@@ -62,7 +62,7 @@ export function DayDetail({ date }: DayDetailProps) {
       {/* Header */}
       <div className="space-y-2">
         <div className="flex items-center gap-2 flex-wrap">
-          <h3 className="font-serif font-semibold text-[var(--text)] capitalize text-base leading-tight">
+          <h3 className="font-semibold text-[var(--text)] capitalize text-base leading-tight">
             {dayLabel}
           </h3>
           {isFuture && (
@@ -73,7 +73,7 @@ export function DayDetail({ date }: DayDetailProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs text-[var(--text-muted)]">{checked}/{total} slots</span>
-          <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+          <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
@@ -99,7 +99,7 @@ export function DayDetail({ date }: DayDetailProps) {
               onClick={() => toggleCheck(date, slot.id)}
               className={cn(
                 'group w-full flex items-center gap-2 py-1.5 px-2 rounded-lg transition-colors text-left',
-                isChecked ? 'bg-zinc-800/40' : 'bg-[var(--surface)] hover:bg-zinc-800'
+                isChecked ? 'bg-gray-100' : 'bg-[var(--surface)] hover:bg-gray-100'
               )}
             >
               {isChecked
@@ -132,7 +132,7 @@ export function DayDetail({ date }: DayDetailProps) {
                   'group flex items-center gap-2 py-1.5 px-2 rounded-lg transition-colors',
                   'border border-[var(--gold)]/20',
                   isChecked
-                    ? 'bg-zinc-800/40'
+                    ? 'bg-gray-100'
                     : 'bg-[color-mix(in_srgb,var(--gold)_5%,var(--surface))] hover:bg-[color-mix(in_srgb,var(--gold)_8%,var(--surface))]'
                 )}>
                   <button onClick={() => toggleCheck(date, slot.id)} className="flex items-center gap-2 flex-1 min-w-0 text-left">

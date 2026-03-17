@@ -121,7 +121,7 @@ export function GoalForm({ month, initialData, onSave, onCancel }: GoalFormProps
         <div className="p-5 space-y-4">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <h2 className="font-serif text-base font-semibold text-[var(--text)]">
+            <h2 className="text-base font-semibold text-[var(--text)]">
               {isEditing ? 'Editar meta' : 'Nova meta'}
             </h2>
             <button
@@ -170,7 +170,7 @@ export function GoalForm({ month, initialData, onSave, onCancel }: GoalFormProps
                 onChange={(e) => setTitle(e.target.value)}
                 autoFocus
                 required
-                className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-zinc-500 transition-colors"
+                className="flex-1 bg-[var(--surface)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm text-[var(--text)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--text-muted)] transition-colors"
               />
             </div>
 
@@ -221,7 +221,7 @@ export function GoalForm({ month, initialData, onSave, onCancel }: GoalFormProps
                           'px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-150',
                           unit === u
                             ? 'text-black scale-[1.04]'
-                            : 'bg-zinc-800 text-[var(--text-muted)] hover:text-[var(--text)]'
+                            : 'bg-gray-200 text-[var(--text-muted)] hover:text-[var(--text)]'
                         )}
                         style={unit === u ? { backgroundColor: color } : {}}
                       >

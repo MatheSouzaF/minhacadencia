@@ -13,25 +13,24 @@ export function MonthlyPage() {
 
   function handleChangeMonth(month: string) {
     setCurrentMonth(month)
-    // When switching month, don't keep a cross-month selected day
   }
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-4">
-        {/* Left: Calendar */}
+    <div className="h-full overflow-hidden p-4 md:p-6 flex gap-4">
+      {/* Left: Calendar grande — preenche todo o espaço */}
+      <div className="flex-1 min-w-0 min-h-0">
         <MonthCalendar
           month={currentMonth}
           selectedDay={selectedDay}
           onSelectDay={setSelectedDay}
           onChangeMonth={handleChangeMonth}
         />
+      </div>
 
-        {/* Right: Goals + Day Detail */}
-        <div className="space-y-4">
-          <GoalsList month={currentMonth} />
-          <DayDetail date={selectedDay} />
-        </div>
+      {/* Right: Goals + Day Detail — sidebar fixa */}
+      <div className="hidden lg:flex w-96 shrink-0 flex-col gap-4 overflow-y-auto">
+        <GoalsList month={currentMonth} />
+        <DayDetail date={selectedDay} />
       </div>
     </div>
   )

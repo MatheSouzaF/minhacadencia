@@ -22,7 +22,7 @@ export function PomodoroPage() {
       {/* Timer central */}
       <div className="flex flex-col items-center gap-2">
         <div className="flex items-center gap-2 mb-2">
-          <h2 className="font-serif text-xl font-semibold text-[var(--text)]">Foco total</h2>
+          <h2 className="text-xl font-semibold text-[var(--text)]">Foco total</h2>
           <PomodoroSettings />
         </div>
 

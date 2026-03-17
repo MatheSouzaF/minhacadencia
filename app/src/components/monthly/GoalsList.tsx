@@ -48,7 +48,7 @@ export function GoalsList({ month }: GoalsListProps) {
       <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h3 className="font-serif font-semibold text-[var(--text)] capitalize">
+          <h3 className="font-semibold text-[var(--text)] capitalize">
             Metas de {monthName}
           </h3>
           <button
@@ -109,7 +109,7 @@ export function GoalsList({ month }: GoalsListProps) {
                           'flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all duration-150',
                           checkedToday
                             ? 'bg-[color-mix(in_srgb,var(--green)_20%,transparent)] text-[var(--green)]'
-                            : 'bg-zinc-800 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-zinc-700'
+                            : 'bg-gray-200 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-gray-300'
                         )}
                       >
                         {checkedToday ? (
@@ -132,7 +132,7 @@ export function GoalsList({ month }: GoalsListProps) {
 
                   {/* Progress bar */}
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                    <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-300"
                         style={{

@@ -1,44 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
-    /* Design system do cronograma.html */
-    --bg: #0f0e0c;
-    --surface: #1a1814;
-    --card: #211f1b;
-    --border: #2e2b25;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --text: #f0ead8;
-    --text-muted: #8a8070;
-    --green: #6abf8a;
-    --blue: #6aaabf;
-    --rose: #bf6a7a;
-    --purple: #9a7abf;
-    --orange: #bf9a6a;
-    --work: #4a7abf;
+    /* Paleta clara com menu escuro */
+    --bg: #F5F3EF;
+    --surface: #F0EDE8;
+    --card: #FFFFFF;
+    --border: #E2E0DB;
+    --gold: #6366F1;
+    --gold-light: #818CF8;
+    --text: #1A1A1A;
+    --text-muted: #6B7280;
+    --green: #10B981;
+    --blue: #3B82F6;
+    --rose: #F43F5E;
+    --purple: #8B5CF6;
+    --orange: #F59E0B;
+    --work: #3B82F6;
+
+    /* Menu/sidebar escuro */
+    --menu-bg: #111113;
+    --menu-surface: #18181b;
+    --menu-border: #27272a;
+    --menu-text: #fafafa;
+    --menu-text-muted: #71717a;
 
     /* Shadcn tokens mapeados */
-    --background: 30 5% 6%;
-    --foreground: 40 33% 90%;
-    --card-bg: 30 7% 11%;
-    --card-foreground: 40 33% 90%;
-    --popover: 30 7% 11%;
-    --popover-foreground: 40 33% 90%;
-    --primary: 40 52% 54%;
-    --primary-foreground: 30 5% 6%;
-    --secondary: 32 9% 16%;
-    --secondary-foreground: 40 33% 90%;
-    --muted: 32 9% 16%;
-    --muted-foreground: 35 10% 48%;
-    --accent: 40 52% 54%;
-    --accent-foreground: 30 5% 6%;
+    --background: 36 20% 95%;
+    --foreground: 0 0% 10%;
+    --card-bg: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 36 14% 93%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 36 14% 93%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 350 45% 57%;
-    --destructive-foreground: 40 33% 90%;
-    --border-color: 32 9% 16%;
-    --input: 32 9% 16%;
-    --ring: 40 52% 54%;
+    --destructive-foreground: 0 0% 98%;
+    --border-color: 36 10% 88%;
+    --input: 36 14% 93%;
+    --ring: 239 84% 67%;
     --radius: 0.75rem;
   }
 
@@ -48,7 +55,7 @@
   }
 
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
@@ -61,23 +68,19 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  h1, h2, h3, h4 {
-    font-family: 'Playfair Display', serif;
-  }
-
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--surface);
+    background: var(--bg);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--border);
+    background: #C9C7C2;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
+    background: #A8A6A1;
   }
 }
 

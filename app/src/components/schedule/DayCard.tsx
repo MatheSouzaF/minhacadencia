@@ -91,7 +91,7 @@ function DailyGoalItem({
 
       {/* Progresso MENSAL — claramente separado */}
       <div className="flex items-center gap-1 shrink-0 opacity-50 group-hover:opacity-80 transition-opacity">
-        <div className="w-10 h-1 bg-zinc-800 rounded-full overflow-hidden">
+        <div className="w-10 h-1 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-300"
             style={{ width: `${pct}%`, backgroundColor: goal.color }}
@@ -197,22 +197,21 @@ export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps
   return (
     <div
       className={cn(
-        'bg-[var(--card)] border rounded-xl flex flex-col h-full',
-        'transition-all duration-200',
+        'bg-[var(--card)] rounded-xl flex flex-col h-full',
+        'transition-all duration-200 border',
         isToday
-          ? 'border-[var(--gold)] shadow-[0_0_0_1px_var(--gold)]'
+          ? 'border-[var(--gold)] shadow-[0_0_20px_rgba(129,140,248,0.15)]'
           : isActive
-            ? 'border-[color-mix(in_srgb,var(--border)_60%,var(--text-muted))]'
+            ? 'border-[var(--text-muted)]/30 shadow-[0_4px_24px_rgba(0,0,0,0.25)]'
             : 'border-[var(--border)]',
-        isActive && !isToday && 'shadow-[0_4px_24px_rgba(0,0,0,0.18)]'
       )}
     >
       {/* Header do card */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)]">
+      <div className="flex items-center justify-between px-3 py-4 border-b border-[var(--border)]">
         <div>
           <div className="flex items-center gap-2">
             <h3 className={cn(
-              'font-serif font-semibold text-base',
+              'font-semibold text-base',
               isToday ? 'text-[var(--gold)]' : 'text-[var(--text)]'
             )}>
               {daySchedule.label}
@@ -259,7 +258,7 @@ export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps
       </div>
 
       {/* Lista de slots */}
-      <div className="flex-1 px-2 py-2 space-y-0.5 overflow-y-auto min-h-0">
+      <div className="flex-1 px-2 py-1.5 space-y-0.5 overflow-y-auto min-h-0">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -333,7 +332,7 @@ export function DayCard({ daySchedule, isToday, isActive = false }: DayCardProps
       </div>
 
       {/* Rodapé — botão adicionar */}
-      <div className="px-3 py-2 border-t border-[var(--border)]">
+      <div className="px-2 py-3 border-t border-[var(--border)]">
         <Button
           variant="ghost"
           size="sm"

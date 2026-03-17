@@ -78,8 +78,8 @@ function ProtectedApp() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-zinc-600 border-t-white rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-[var(--border)] border-t-[var(--text)] rounded-full animate-spin" />
       </div>
     )
   }

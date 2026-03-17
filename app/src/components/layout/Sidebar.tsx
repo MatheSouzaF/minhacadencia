@@ -17,12 +17,12 @@ export function Sidebar() {
   return (
     <>
       {/* Sidebar — visível apenas em md+ */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full w-56 bg-[var(--surface)] border-r border-[var(--border)] flex-col z-40">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-56 bg-[var(--menu-bg)] border-r border-[var(--menu-border)] flex-col z-40">
         {/* Logo */}
-        <div className="px-4 py-5 border-b border-[var(--border)]">
+        <div className="px-4 py-5 border-b border-[var(--menu-border)]">
           <div className="flex items-center gap-2">
-            <Waves className="w-4 h-4 text-[var(--gold)] shrink-0" />
-            <h1 className="text-[var(--gold)] font-serif font-semibold text-lg leading-tight">
+            <Waves className="w-4 h-4 text-[var(--gold-light)] shrink-0" />
+            <h1 className="text-[var(--gold-light)] font-semibold text-lg leading-tight">
               Cadência
             </h1>
           </div>
@@ -39,8 +39,8 @@ export function Sidebar() {
                 cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 group cursor-pointer',
                   isActive
-                    ? 'bg-[color-mix(in_srgb,var(--gold)_15%,transparent)] text-[var(--gold)]'
-                    : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--card)]'
+                    ? 'bg-[color-mix(in_srgb,var(--gold-light)_15%,transparent)] text-[var(--gold-light)]'
+                    : 'text-[var(--menu-text-muted)] hover:text-[var(--menu-text)] hover:bg-[var(--menu-surface)]'
                 )
               }
             >
@@ -51,10 +51,10 @@ export function Sidebar() {
         </nav>
 
         {/* Rodapé */}
-        <div className="px-2 py-3 border-t border-[var(--border)]">
+        <div className="px-2 py-3 border-t border-[var(--menu-border)]">
           <button
             onClick={logout}
-            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm text-[var(--text-muted)] hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 cursor-pointer"
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm text-[var(--menu-text-muted)] hover:text-red-400 hover:bg-red-400/10 transition-all duration-200 cursor-pointer"
           >
             <LogOut className="w-4 h-4 shrink-0" />
             <span className="font-medium">Sair</span>
@@ -63,7 +63,7 @@ export function Sidebar() {
       </aside>
 
       {/* Bottom Navigation — visível apenas em mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--surface)] border-t border-[var(--border)] flex items-center">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--menu-bg)] border-t border-[var(--menu-border)] flex items-center">
         {navItems.map(({ to, icon: Icon, label, end }) => (
           <NavLink
             key={to}
@@ -73,8 +73,8 @@ export function Sidebar() {
               cn(
                 'flex-1 flex flex-col items-center justify-center gap-1 py-2.5 text-[10px] font-medium transition-all duration-200',
                 isActive
-                  ? 'text-[var(--gold)]'
-                  : 'text-[var(--text-muted)]'
+                  ? 'text-[var(--gold-light)]'
+                  : 'text-[var(--menu-text-muted)]'
               )
             }
           >

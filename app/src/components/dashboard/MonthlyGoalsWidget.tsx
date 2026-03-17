@@ -10,7 +10,7 @@ export function MonthlyGoalsWidget() {
     <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="font-serif text-lg font-semibold text-[var(--text)]">Metas do Mês</h3>
+        <h3 className="text-lg font-semibold text-[var(--text)]">Metas do Mês</h3>
         <Link
           to="/mensal"
           className="flex items-center gap-1 text-xs text-[var(--gold)] hover:opacity-80 transition-opacity"
@@ -51,7 +51,7 @@ export function MonthlyGoalsWidget() {
                     {percent}%
                   </span>
                 </div>
-                <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{

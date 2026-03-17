@@ -54,13 +54,26 @@ export async function addSlot(req: AuthRequest, res: Response): Promise<void> {
     return
   }
 
-  const daySchedule = await prisma.daySchedule.findUnique({
-    where: { userId_day: { userId: req.userId!, day: req.params.day } },
-  })
-  if (!daySchedule) {
-    res.status(404).json({ error: 'Dia não encontrado' })
-    return
+  const DOW_LABELS: Record<string, string> = {
+    domingo: 'Domingo', segunda: 'Segunda', terca: 'Terça', quarta: 'Quarta',
+    quinta: 'Quinta', sexta: 'Sexta', sabado: 'Sábado',
   }
+  const DOW_ORDER: Record<string, number> = {
+    segunda: 0, terca: 1, quarta: 2, quinta: 3, sexta: 4, sabado: 5, domingo: 6,
+  }
+
+  const daySchedule = await prisma.daySchedule.upsert({
+    where: { userId_day: { userId: req.userId!, day: req.params.day } },
+    update: {},
+    create: {
+      userId: req.userId!,
+      day: req.params.day,
+      label: DOW_LABELS[req.params.day] ?? req.params.day,
+      tag: '',
+      tagType: 'none',
+      order: DOW_ORDER[req.params.day] ?? 99,
+    },
+  })
 
   const slot = await prisma.slot.create({
     data: { dayScheduleId: daySchedule.id, ...parsed.data },

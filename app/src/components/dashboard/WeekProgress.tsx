@@ -20,7 +20,7 @@ export function WeekProgress({ data }: WeekProgressProps) {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-serif text-lg font-semibold text-[var(--text)]">Esta semana</h3>
+          <h3 className="text-lg font-semibold text-[var(--text)]">Esta semana</h3>
           <p className="text-sm text-[var(--text-muted)] mt-0.5">{data.checked}/{data.total} slots concluídos</p>
         </div>
         <span className="text-3xl font-bold text-[var(--gold)]">{data.percent}%</span>
